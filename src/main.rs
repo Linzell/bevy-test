@@ -21,6 +21,7 @@ fn setup(
     mut scene_spawner: ResMut<SceneSpawner>,
     mut meshes: ResMut<Assets<Mesh>>,
     mut materials: ResMut<Assets<StandardMaterial>>,
+    audio: Res<Audio>,
 ) {
     // Insert a resource with the current scene information
     commands.insert_resource(Animations(vec![
@@ -66,6 +67,10 @@ fn setup(
     println!("  - arrow up / down: speed up / slow down animation playback");
     println!("  - arrow left / right: seek backward / forward");
     println!("  - return: change animation");
+
+    // Music
+    let music = asset_server.load("sounds/piano.ogg");
+    audio.play(music);
 }
 
 // Once the scene is loaded, start the animation
