@@ -1,8 +1,11 @@
 use bevy::prelude::*;
+use bevy_kira_audio::{Audio, AudioPlugin};
 
 fn main() {
     App::new()
         .add_plugins(DefaultPlugins)
+        .add_plugin(AudioPlugin)
+        .add_startup_system(start_background_audio)
         .insert_resource(AmbientLight {
             color: Color::WHITE,
             brightness: 1.0,
@@ -21,7 +24,6 @@ fn setup(
     mut scene_spawner: ResMut<SceneSpawner>,
     mut meshes: ResMut<Assets<Mesh>>,
     mut materials: ResMut<Assets<StandardMaterial>>,
-    audio: Res<Audio>,
 ) {
     // Insert a resource with the current scene information
     commands.insert_resource(Animations(vec![
@@ -67,10 +69,11 @@ fn setup(
     println!("  - arrow up / down: speed up / slow down animation playback");
     println!("  - arrow left / right: seek backward / forward");
     println!("  - return: change animation");
+}
 
-    // Music
-    let music = asset_server.load("sounds/piano.ogg");
-    audio.play(music);
+// Music
+fn start_background_audio(asset_server: Res<AssetServer>, audio: Res<Audio>) {
+  audio.play_looped(asset_server.load("sounds/piano.ogg"));
 }
 
 // Once the scene is loaded, start the animation
